@@ -1,0 +1,7 @@
+{
+  "appId": "br.com.partner.pprpca",
+  "appName": "Partner PPR e PCA",
+  "webDir": "www",
+  "android": { "allowMixedContent": false },
+  "server": { "androidScheme": "https" }
+}

@@ -1,0 +1,73 @@
+{
+  "name": "partner-ppr-pca",
+  "productName": "Partner PPR e PCA",
+  "version": "1.0.0",
+  "description": "Partner: gerenciamento em PPR e PCA",
+  "author": {
+    "name": "Partner",
+    "email": "emoraesguilherme78@gmail.com"
+  },
+  "license": "UNLICENSED",
+  "private": true,
+  "main": "electron/main.js",
+  "scripts": {
+    "start": "electron .",
+    "web": "npx serve www -l 8080",
+    "dist:win": "electron-builder --win nsis --x64",
+    "dist:linux": "electron-builder --linux AppImage deb --x64",
+    "android:add": "npx cap add android",
+    "android:sync": "npx cap sync android",
+    "android:build": "npx cap sync android && cd android && ./gradlew assembleDebug"
+  },
+  "dependencies": {
+    "@capacitor/android": "^8.6.2",
+    "@capacitor/core": "^8.6.2",
+    "@capgo/capacitor-native-biometric": "^8.9.3"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^8.6.2",
+    "electron": "^45.5.0",
+    "electron-builder": "^26.18.0"
+  },
+  "build": {
+    "appId": "br.com.partner.pprpca",
+    "productName": "Partner PPR e PCA",
+    "copyright": "© 2026 Partner. Todos os direitos reservados.",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "electron/**",
+      "www/**",
+      "package.json"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "www/icons/icon-256.png",
+      "artifactName": "Partner-PPR-PCA-Setup-${version}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "perMachine": false,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Partner PPR e PCA",
+      "language": "1046"
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "icon": "www/icons/icon-512.png",
+      "category": "Office",
+      "maintainer": "Partner <emoraesguilherme78@gmail.com>",
+      "artifactName": "Partner-PPR-PCA-${version}.${ext}",
+      "synopsis": "Gerenciamento em PPR e PCA"
+    },
+    "publish": null
+  },
+  "homepage": "https://github.com/eguilherme88-wq/partner-ppr-pca"
+}
