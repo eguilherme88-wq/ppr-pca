@@ -2,7 +2,7 @@
  * Vários apps dividem o mesmo endereço (eguilherme88-wq.github.io): este SW só mexe
  * nos caches com o prefixo deste app e só intercepta páginas da pasta /ppr-pca/. */
 const PREFIXO = 'partner-ppr-pca-';
-const CACHE = PREFIXO + 'v2';
+const CACHE = PREFIXO + 'v3';
 const BASE = new URL('./', self.location).pathname; // ex.: /ppr-pca/
 const ASSETS = ['./', './index.html', './js/platform.js', './firebase-config.js', './manifest.webmanifest',
   './icons/icon-192.png', './icons/icon-512.png', './icons/logo.png'];
