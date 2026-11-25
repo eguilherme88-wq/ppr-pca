@@ -59,10 +59,7 @@ jobs:
       - name: Criar projeto Android
         run: |
           npx cap add android
-          mkdir -p assets
-          cp www/icons/icon-1024.png assets/icon-only.png
-          cp www/icons/icon-1024.png assets/icon-foreground.png
-          npx --yes @capacitor/assets generate --android --iconBackgroundColor '#1F4A40' --splashBackgroundColor '#EDF1EF' || echo "Ícones padrão mantidos"
+          npx --yes @capacitor/assets generate --android
           npx cap sync android
       - name: Compilar APK
         working-directory: android
