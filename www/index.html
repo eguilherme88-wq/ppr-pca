@@ -248,6 +248,7 @@ code.pw{font:600 13px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;backg
 .mtx input{width:18px;height:18px;accent-color:var(--btn)}
 @media (max-width:860px){.me{border:0;padding:0;margin:0 6px 0 0;display:flex;align-items:center}.mename{display:none}.meacts .tool span{display:none}}
 .bio-btn{margin-top:10px;display:flex;align-items:center;justify-content:center;gap:8px}.bio-btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.or{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:12.5px;margin:14px 0 4px}.or::before,.or::after{content:"";flex:1;height:1px;background:var(--line)}
+.inst-opts{display:grid;gap:10px}.inst-opt{display:flex;gap:14px;align-items:center;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);text-decoration:none;text-align:left;width:100%}.inst-opt:hover{background:var(--surface2)}.inst-opt b{display:block;font-size:14.5px}.inst-opt span{display:block;font-size:13px;color:var(--muted)}.inst-opt .ic{width:38px;height:38px;border-radius:9px;display:grid;place-items:center;background:var(--surface2);flex:none;font-weight:800;font-size:13px}.inst-opt.rec{border-color:var(--btn);box-shadow:inset 0 0 0 1px var(--btn)}.inst-steps{margin:8px 0 0;padding-left:20px;font-size:14px}.inst-steps li{margin-bottom:4px}
 .aok{color:var(--ok);background:var(--ok-soft);padding:8px 10px;border-radius:8px;font-size:13.5px;margin:0 0 12px}
 
 .col{min-width:0;display:flex;flex-direction:column}
@@ -305,6 +306,7 @@ main{padding-top:22px!important}
         <button data-a="theme" data-t="dark" aria-pressed="false" title="Tela escura"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg><span>Escura</span></button>
         <button data-a="theme" data-t="auto" aria-pressed="false" title="Seguir o sistema"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg><span>Auto</span></button>
       </div>
+      <button class="tool" data-a="instalar" id="instbtn" title="Instalar o app neste aparelho ou baixar os instaladores"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg><span>Instalar app</span></button>
       <button class="tool" data-a="fs" id="fsbtn" title="Tela cheia"></button>
     </div>
   </aside>
@@ -1392,6 +1394,32 @@ async function toggleFs(){try{if(fsEl()){await (document.exitFullscreen||documen
 document.addEventListener('fullscreenchange',updFs);document.addEventListener('webkitfullscreenchange',updFs);
 (()=>{let t='auto';try{t=localStorage.getItem(TKEY)||'auto'}catch(_){}applyTheme(t);updFs()})();
 
+/* ---------- instalar o app ---------- */
+const REPO='https://github.com/eguilherme88-wq/ppr-pca';
+const DL=f=>`${REPO}/releases/latest/download/${f}`;
+let installEvt=null;
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installEvt=e});
+window.addEventListener('appinstalled',()=>{installEvt=null;closeModal();toast('App instalado neste aparelho.')});
+const ua=navigator.userAgent;
+const SO=/iPhone|iPad|iPod/.test(ua)||(/Macintosh/.test(ua)&&navigator.maxTouchPoints>1)?'ios':/Android/.test(ua)?'android':/Windows/.test(ua)?'windows':/Mac/.test(ua)?'mac':/Linux|X11/.test(ua)?'linux':'outro';
+const jaInstalado=()=>Platform.isNative()||Platform.isElectron()||matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+function openInstalar(){
+  const rec=k=>k===SO||(k==='linux'&&SO==='linux')?' rec':'';
+  const opt=(href,ic,t,d,k)=>`<a class="inst-opt${rec(k)}" href="${href}" target="_blank" rel="noopener"><span class="ic">${ic}</span><div><b>${t}</b><span>${d}</span></div></a>`;
+  const pwa=installEvt?`<button class="inst-opt rec" data-a="inst-pwa"><span class="ic">⬇</span><div><b>Instalar neste aparelho agora</b><span>Cria o atalho e abre o sistema em janela própria. Leva poucos segundos.</span></div></button>`:'';
+  const ios=SO==='ios'?`<div class="panel" style="margin:0"><b>iPhone e iPad</b><ol class="inst-steps"><li>Abra este endereço no <b>Safari</b>.</li><li>Toque em <b>Compartilhar</b> (quadrado com seta para cima).</li><li>Escolha <b>Adicionar à Tela de Início</b> e confirme.</li></ol></div>`:'';
+  const semPrompt=!installEvt&&SO!=='ios'&&!jaInstalado()?`<p class="muted" style="font-size:13px;margin:0">Para instalar pelo navegador: no Chrome ou Edge, abra o menu ⋮ e escolha <b>Instalar app</b> (no computador, também pelo ícone de instalação na barra de endereço).</p>`:'';
+  openModal(`<div class="mh"><div><h2>Instalar o app</h2><p class="muted">${jaInstalado()?'Você já está usando o app instalado. Abaixo estão os instaladores para outros aparelhos.':'Escolha a forma de instalar. A opção indicada para este aparelho está destacada.'}</p></div><button type="button" class="icon" data-a="close">Fechar</button></div>
+  <div class="mb"><div class="inst-opts">${pwa}${ios}${semPrompt}
+   ${opt(DL('Partner-PPR-PCA-Setup.exe'),'Win','Windows','Instalador .exe (Windows 10 e 11, 64 bits)','windows')}
+   ${opt(DL('Partner-PPR-PCA-Android.apk'),'APK','Android: celular e tablet','Arquivo .apk. Permita "instalar apps desconhecidos" quando o Android pedir','android')}
+   ${opt(DL('Partner-PPR-PCA.AppImage'),'Lnx','Linux (qualquer distribuição)','Arquivo .AppImage: dê permissão de execução e abra','linux')}
+   ${opt(DL('Partner-PPR-PCA.deb'),'deb','Linux Ubuntu e Debian','Pacote .deb: instale com sudo apt install ./arquivo.deb','deb')}
+   ${opt(REPO+'/releases','⋯','Todas as versões','Página de versões no GitHub','x')}
+  </div><p class="muted" style="font-size:12.5px;margin:12px 0 0">Todas as versões usam os mesmos dados da empresa, sincronizados pelo Firebase. Esta página continua funcionando no navegador, sem instalar nada.</p></div>
+  <div class="mf"><button class="btn sec" data-a="close">Fechar</button></div>`)}
+async function instalarPWA(){if(!installEvt)return openInstalar();installEvt.prompt();try{const r=await installEvt.userChoice;if(r.outcome==='accepted')toast('Instalando…')}catch(_){}installEvt=null;closeModal()}
+
 /* ---------- sobre o sistema e direitos reservados ---------- */
 const SISTEMA={nome:'Partner',sub:'Gerenciamento em PPR e PCA',versao:'1.0',data:'2026-09-28',anoInicial:2026,titular:'Partner'};
 const copyTxt=()=>{const y=new Date().getFullYear();return `© ${SISTEMA.anoInicial}${y>SISTEMA.anoInicial?'–'+y:''} ${SISTEMA.titular}. Todos os direitos reservados.`};
@@ -1458,6 +1486,8 @@ document.addEventListener('click',async e=>{
   if(a==='trial-lic'){if(isAdm()&&await askOk('Registrar a licença definitiva?','Registrar licença','O período de teste é encerrado e o sistema passa a funcionar sem prazo.')){try{await store.cfg({...state.config,trial:{...(state.config.trial||{}),licenciado:true}});toast('Licença definitiva registrada.')}catch(_){}}return}
   if(a==='trial-reabrir'){if(isAdm()){try{await store.cfg({...state.config,trial:{...(state.config.trial||{}),licenciado:false,ativo:true,inicio:today()}});toast('Período de teste reaberto a partir de hoje.')}catch(_){}}return}
   if(a==='fs'){toggleFs();return}
+  if(a==='instalar'){openInstalar();return}
+  if(a==='inst-pwa'){instalarPWA();return}
   if(a==='nav'){state.view=b.dataset.v;render();window.scrollTo(0,0)}
   else if(a==='sub'){state.sub[b.dataset.p]=b.dataset.s;render()}
   else if(a==='new'){openForm(b.dataset.f,null,b.dataset.w?{trabId:b.dataset.w}:{})}

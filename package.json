@@ -45,7 +45,7 @@
     "win": {
       "target": "nsis",
       "icon": "www/icons/icon-256.png",
-      "artifactName": "Partner-PPR-PCA-Setup-${version}.${ext}",
+      "artifactName": "Partner-PPR-PCA-Setup.${ext}",
       "executableName": "PartnerPPRPCA"
     },
     "nsis": {
@@ -66,7 +66,7 @@
       "icon": "www/icons/icon-512.png",
       "category": "Office",
       "maintainer": "Partner <emoraesguilherme78@gmail.com>",
-      "artifactName": "Partner-PPR-PCA-${version}.${ext}",
+      "artifactName": "Partner-PPR-PCA.${ext}",
       "synopsis": "Gerenciamento em PPR e PCA",
       "executableName": "partner-ppr-pca",
       "desktop": {
