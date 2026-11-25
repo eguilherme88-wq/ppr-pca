@@ -1422,11 +1422,17 @@ document.addEventListener('fullscreenchange',updFs);document.addEventListener('w
 const REPO='https://github.com/eguilherme88-wq/ppr-pca';
 const DL=f=>`${REPO}/releases/latest/download/${f}`;
 let installEvt=null;
-window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installEvt=e});
-window.addEventListener('appinstalled',()=>{installEvt=null;closeModal();toast('App instalado neste aparelho.')});
+const IKEY='ppr-pca-app-instalado';
+const marcaInst=v=>{try{v?localStorage.setItem(IKEY,'1'):localStorage.removeItem(IKEY)}catch(_){}};
+// O navegador só oferece a instalação quando o app NÃO está instalado; se oferecer, o app foi removido.
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installEvt=e;marcaInst(false);updInstBtn()});
+window.addEventListener('appinstalled',()=>{installEvt=null;marcaInst(true);closeModal();updInstBtn();toast('App instalado neste aparelho.')});
 const ua=navigator.userAgent;
 const SO=/iPhone|iPad|iPod/.test(ua)||(/Macintosh/.test(ua)&&navigator.maxTouchPoints>1)?'ios':/Android/.test(ua)?'android':/Windows/.test(ua)?'windows':/Mac/.test(ua)?'mac':/Linux|X11/.test(ua)?'linux':'outro';
-const jaInstalado=()=>Platform.isNative()||Platform.isElectron()||matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+const rodandoComoApp=()=>Platform.isNative()||Platform.isElectron()||matchMedia('(display-mode: standalone)').matches||matchMedia('(display-mode: window-controls-overlay)').matches||matchMedia('(display-mode: fullscreen)').matches||navigator.standalone===true;
+const jaInstalado=()=>{if(rodandoComoApp())return true;if(installEvt)return false;try{return localStorage.getItem(IKEY)==='1'}catch(_){return false}};
+function updInstBtn(){const b=$('#instbtn');if(b)b.hidden=jaInstalado()}
+try{matchMedia('(display-mode: standalone)').addEventListener('change',updInstBtn)}catch(_){}
 function openInstalar(){
   const rec=k=>k===SO||(k==='linux'&&SO==='linux')?' rec':'';
   const opt=(href,ic,t,d,k)=>`<a class="inst-opt${rec(k)}" href="${href}" target="_blank" rel="noopener"><span class="ic">${ic}</span><div><b>${t}</b><span>${d}</span></div></a>`;
@@ -1476,7 +1482,7 @@ function render(){
   const m=$('#main');
   if(!state.ready){m.innerHTML='<div class="empty"><p>Carregando dados…</p></div>';$('.app').hidden=false;return}
   if(authGate())return;
-  meBox();tbInfo();
+  meBox();tbInfo();updInstBtn();
   document.querySelectorAll('.nav [data-v]').forEach(b=>{b.hidden=!pode(VIEWMOD[b.dataset.v])});
   if(!pode(VIEWMOD[state.view])){const f=Object.keys(VIEWMOD).find(v=>pode(VIEWMOD[v]));state.view=f||'painel';document.querySelectorAll('.nav [data-v]').forEach(b=>b.dataset.v===state.view?b.setAttribute('aria-current','page'):b.removeAttribute('aria-current'))}
   const ae=document.activeElement,aid=ae&&ae.id,sel=ae&&ae.selectionStart;
