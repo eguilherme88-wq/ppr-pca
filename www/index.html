@@ -1071,7 +1071,7 @@ async function authSubmit(f){
     if(u.situacao==='Inativo')return aerr('Este usuário está inativo. Procure o administrador.');
     if(trialInfo().expirado&&u.nivel!=='Administrador')return aerr('O período de teste terminou. Procure o administrador.');
     setSession(u.id);try{await store.put('usuarios',u.id,{...u,ultimoAcesso:new Date().toISOString()})}catch(_){}render();
-    if(state.bioOk&&!u.trocarSenha&&!Platform.bioSaved()&&!sessionStorage.getItem('bio-ofertada')){try{sessionStorage.setItem('bio-ofertada','1')}catch(_){}setTimeout(()=>openBio(true),400)}
+    if(state.bioOk&&!u.trocarSenha&&!Platform.bioSaved()&&!sessionStorage.getItem('ppr-pca-bio-ofertada')){try{sessionStorage.setItem('ppr-pca-bio-ofertada','1')}catch(_){}setTimeout(()=>openBio(true),400)}
     return;
   }
   if(f.id==='f-troca'){

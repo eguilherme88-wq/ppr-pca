@@ -115,7 +115,7 @@
 
   /* ---------------- PWA ---------------- */
   if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol) && !isNative()) {
-    window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+    window.addEventListener('load', () => navigator.serviceWorker.register('partner-ppr-pca-sw.js', { scope: './' }).catch(() => {}));
   }
 
   window.Platform = {

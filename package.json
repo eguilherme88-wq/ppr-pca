@@ -45,7 +45,8 @@
     "win": {
       "target": "nsis",
       "icon": "www/icons/icon-256.png",
-      "artifactName": "Partner-PPR-PCA-Setup-${version}.${ext}"
+      "artifactName": "Partner-PPR-PCA-Setup-${version}.${ext}",
+      "executableName": "PartnerPPRPCA"
     },
     "nsis": {
       "oneClick": false,
@@ -54,7 +55,8 @@
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
       "shortcutName": "Partner PPR e PCA",
-      "language": "1046"
+      "language": "1046",
+      "guid": "6f1c2a7e-4b3d-4e8a-9c21-5d0e8f3a7b12"
     },
     "linux": {
       "target": [
@@ -65,9 +67,20 @@
       "category": "Office",
       "maintainer": "Partner <emoraesguilherme78@gmail.com>",
       "artifactName": "Partner-PPR-PCA-${version}.${ext}",
-      "synopsis": "Gerenciamento em PPR e PCA"
+      "synopsis": "Gerenciamento em PPR e PCA",
+      "executableName": "partner-ppr-pca",
+      "desktop": {
+        "entry": {
+          "StartupWMClass": "partner-ppr-pca",
+          "Name": "Partner PPR e PCA"
+        }
+      }
     },
-    "publish": null
+    "publish": null,
+    "extraMetadata": {
+      "name": "partner-ppr-pca"
+    }
   },
-  "homepage": "https://github.com/eguilherme88-wq/partner-ppr-pca"
+  "homepage": "https://github.com/eguilherme88-wq/partner-ppr-pca",
+  "desktopName": "partner-ppr-pca.desktop"
 }

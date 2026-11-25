@@ -1,17 +1,31 @@
 {
+  "id": "/ppr-pca/?app=partner-ppr-pca",
   "name": "Partner: gerenciamento em PPR e PCA",
   "short_name": "Partner PPR/PCA",
   "description": "Controle do Programa de Proteção Respiratória e do Programa de Conservação Auditiva.",
   "lang": "pt-BR",
-  "start_url": "./index.html",
+  "start_url": "./index.html?app=partner-ppr-pca",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",
   "background_color": "#EDF1EF",
   "theme_color": "#1F4A40",
   "icons": [
-    {"src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png"},
-    {"src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png"},
-    {"src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
   ]
 }

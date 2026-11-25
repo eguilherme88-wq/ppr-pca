@@ -54,6 +54,16 @@ firebase use --add            # escolha o projeto
 firebase deploy --only firestore:rules,hosting
 ```
 
+## Convivência com outros apps
+
+Vários apps da mesma conta ficam no mesmo endereço (`eguilherme88-wq.github.io`) e dividem o armazenamento do navegador. Este app:
+
+- usa só chaves de armazenamento com prefixo `ppr-pca-` e caches com prefixo `partner-ppr-pca-`, e nunca apaga caches de outros apps;
+- tem service worker próprio (`partner-ppr-pca-sw.js`), que só atua na pasta `/ppr-pca/`;
+- instala como app separado (identificador `/ppr-pca/?app=partner-ppr-pca`);
+- no computador, usa pasta de dados, porta local (46918) e armazenamento próprios (`persist:partner-ppr-pca`), com identificador `br.com.partner.pprpca`;
+- no Android, usa o pacote `br.com.partner.pprpca`.
+
 ## Desenvolvimento
 
 ```bash

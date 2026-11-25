@@ -6,12 +6,20 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.join(__dirname, '..', 'www');
-const PORTS = [47821, 47822, 47823]; // porta fixa: mantém os dados locais entre aberturas
+// Identidade própria: porta, armazenamento e pasta de dados exclusivos deste app,
+// para não se misturar com outros apps instalados no mesmo computador.
+const APP_ID = 'br.com.partner.pprpca';
+const PARTITION = 'persist:partner-ppr-pca';
+const BASE_PORT = 40000 + ([...APP_ID].reduce((h, c) => (h * 31 + c.charCodeAt(0)) >>> 0, 7) % 9000);
+const PORTS = [BASE_PORT, BASE_PORT + 1, BASE_PORT + 2]; // porta fixa: mantém os dados locais entre aberturas
+app.setName('Partner PPR e PCA');
+if (process.platform === 'win32') app.setAppUserModelId(APP_ID);
 const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.json': 'application/json', '.webmanifest': 'application/manifest+json',
   '.png': 'image/png', '.svg': 'image/svg+xml', '.css': 'text/css', '.ico': 'image/x-icon' };
 
 function handler(req, res) {
     let p = decodeURIComponent(new URL(req.url, 'http://localhost').pathname);
+    if (p === '/__app') { res.writeHead(200, { 'Content-Type': 'text/plain' }); return res.end(APP_ID); }
     if (p === '/') p = '/index.html';
     const file = path.normalize(path.join(ROOT, p));
     if (!file.startsWith(ROOT)) { res.writeHead(403); return res.end(); }
@@ -47,7 +55,7 @@ async function createWindow() {
     icon: path.join(ROOT, 'icons', 'icon-512.png'),
     backgroundColor: '#EDF1EF',
     autoHideMenuBar: true,
-    webPreferences: { contextIsolation: true, nodeIntegration: false, sandbox: true }
+    webPreferences: { contextIsolation: true, nodeIntegration: false, sandbox: true, partition: PARTITION }
   });
   win.webContents.setWindowOpenHandler(({ url }) => {
     if (!url.startsWith(`http://localhost:${port}`)) { shell.openExternal(url); return { action: 'deny' }; }
