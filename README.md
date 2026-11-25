@@ -40,8 +40,8 @@ Sem configuração, os dados ficam só no aparelho. Para compartilhar entre comp
 3. **Build > Authentication > Começar > E-mail/senha > Ativar**. Em *Users > Add user*, crie a conta da empresa (ex.: `emoraesguilherme78@gmail.com` com uma senha forte).
 4. Em **Authentication > Settings > User actions**, desmarque *Enable create (sign-up)* para impedir cadastros de fora.
 5. **Firestore > Regras**: cole o conteúdo de `firestore.rules` e publique. Somente os e-mails listados ali acessam os dados.
-6. **Configurações do projeto > Seus apps > Web (`</>`)**: registre o app e copie o objeto `firebaseConfig` para `www/firebase-config.js`.
-7. Faça commit. A versão web e os próximos instaladores já usam o Firebase.
+6. **Configurações do projeto > Seus apps > Web (`</>`)**: registre o app e copie o objeto `firebaseConfig`.
+7. No GitHub, em **Settings > Secrets and variables > Actions > New repository secret**, crie o secret `FIREBASE_CONFIG_JS` com o conteúdo completo do arquivo `www/firebase-config.js` já preenchido. A configuração não fica no código; os builds e a versão web a recebem por esse secret.
 
 Na primeira abertura de cada aparelho, o sistema pede o e-mail e a senha da **conta da empresa** (uma vez só). Depois aparece o login normal dos usuários do sistema, com níveis de acesso, matriz de permissões e biometria.
 

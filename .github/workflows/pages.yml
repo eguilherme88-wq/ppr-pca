@@ -19,6 +19,10 @@ jobs:
     environment: { name: github-pages, url: '${{ steps.d.outputs.page_url }}' }
     steps:
       - uses: actions/checkout@v4
+      - name: Configuração do Firebase
+        shell: bash
+        env: { FIREBASE_CONFIG_JS: "${{ secrets.FIREBASE_CONFIG_JS }}" }
+        run: if [ -n "$FIREBASE_CONFIG_JS" ]; then printf '%s\n' "$FIREBASE_CONFIG_JS" > www/firebase-config.js; fi
       - uses: actions/configure-pages@v5
         with: { enablement: true }
       - uses: actions/upload-pages-artifact@v3
